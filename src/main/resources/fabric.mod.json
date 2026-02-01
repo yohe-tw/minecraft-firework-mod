@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "firework-mod",
+	"version": "0.0.1",
+	"name": "Firework mod",
+	"description": "Firework !!!",
+	"authors": [
+		"yohe"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/firework-mod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.yohe.firework.FireworkMod"
+		],
+		"fabric-datagen": [
+			"net.yohe.firework.FireworkModDataGenerator"
+		],
+		"client": [
+			"net.yohe.firework.FireworkModClient"
+		]
+	},
+	"mixins": [
+		"firework-mod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.18.4",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
