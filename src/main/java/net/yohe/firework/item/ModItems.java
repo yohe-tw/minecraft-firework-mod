@@ -22,13 +22,18 @@ public class ModItems {
                     .luminance(state -> 15) // 設定亮度為滿分 15
                     .sounds(BlockSoundGroup.WOOD)
     ));
-    public static final Item FAKE_DIAMOND = Registry.register(Registries.ITEM, Identifier.of(FireworkMod.MOD_ID, "fake_diamond"), new Item(new Item.Settings()));
-    public static final Item SPARKLER = Registry.register(Registries.ITEM, Identifier.of(FireworkMod.MOD_ID, "sparkler"), new SparklerItem(SPARKLER_BLOCK, new Item.Settings().maxCount(1)));
+    public static final Item FAKE_DIAMOND = registerItem("fake_diamond", new Item(new Item.Settings()));
+    public static final Item SPARKLER = registerItem("sparkler", new SparklerItem(SPARKLER_BLOCK, new Item.Settings().maxCount(1)));
+    public static final Item CUSTOMFIREWORK = registerItem("custom_firework", new CustomFireworkItem(new Item.Settings()));
 
+    private static Item registerItem(String name, Item item) {
+        return Registry.register(Registries.ITEM, Identifier.of(FireworkMod.MOD_ID, name), item);
+    }
     public static void RegistryItems() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(entries -> {
             entries.add(FAKE_DIAMOND);
             entries.add(SPARKLER);
+            entries.add(CUSTOMFIREWORK);
         });
     }
 }

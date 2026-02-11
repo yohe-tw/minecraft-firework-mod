@@ -3,7 +3,8 @@
 	"package": "net.yohe.firework.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"FireworkRocketEntityAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

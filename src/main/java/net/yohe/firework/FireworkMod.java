@@ -2,6 +2,7 @@ package net.yohe.firework;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.yohe.firework.entity.ModEntities;
 import net.yohe.firework.item.ModItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

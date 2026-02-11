@@ -4,9 +4,7 @@ import net.fabricmc.fabric.impl.recipe.ingredient.builtin.CustomDataIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.VerticallyAttachableBlockItem;
@@ -19,7 +17,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent; // 在 1.21 中，通常使用 NbtComponent
 import net.minecraft.nbt.NbtCompound;
 import org.joml.Vector3f;
