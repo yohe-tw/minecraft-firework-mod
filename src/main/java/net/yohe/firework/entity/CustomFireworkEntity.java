@@ -1,5 +1,6 @@
 package net.yohe.firework.entity;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.component.type.FireworksComponent;
@@ -11,15 +12,21 @@ import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.yohe.firework.FireworkMod;
 import net.yohe.firework.mixin.FireworkRocketEntityAccessor;
+import org.joml.Vector3f;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -74,9 +81,69 @@ public class CustomFireworkEntity extends FireworkRocketEntity {
     public void handleStatus(byte status) {
         // 攔截爆炸狀態碼
         if (status == EntityStatuses.EXPLODE_FIREWORK_CLIENT && this.getWorld().isClient) {
-            spawnLineParticles();
+            spawnImageParticles();
         } else {
             super.handleStatus(status);
+        }
+    }
+
+    private void spawnImageParticles() {
+        try {
+            // 1. 定義圖片路徑
+            Identifier textureId = Identifier.of(FireworkMod.MOD_ID, "textures/pattern/rickroll.png");
+
+            // 2. 透過資源管理器讀取檔案
+            InputStream inputStream = MinecraftClient.getInstance().getResourceManager()
+                    .getResource(textureId).get().getInputStream();
+            BufferedImage image = ImageIO.read(inputStream);
+
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            // 3. 雙層迴圈遍歷像素
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int pixel = image.getRGB(x, y);
+
+                    // 4. 判斷是否為「黑色」（或者你指定的顏色）
+                    // 0xFF000000 代表純黑（包含 Alpha 通道）
+//                    if ((pixel & 0x00FFFFFF) == 0) {
+//                        // 計算相對位置偏移
+//                        double offsetX = (x - width / 2.0) * 0.2;
+//                        double offsetY = (height / 2.0 - y) * 0.2;
+//
+//                        this.getWorld().addParticle(
+//                                ParticleTypes.FIREWORK,
+//                                this.getX() + offsetX, this.getY() + offsetY, this.getZ(),
+//                                0, 0, 0
+//                        );
+//                    }
+
+                    if ((pixel >> 24 & 0xFF) == 0) continue;
+
+                    // 4. 提取 16 進位顏色並轉為 0.0 ~ 1.0 的 float
+                    float r = (float) (pixel >> 16 & 0xFF) / 255.0f;
+                    float g = (float) (pixel >> 8 & 0xFF) / 255.0f;
+                    float b = (float) (pixel & 0xFF) / 255.0f;
+
+                    // 5. 計算爆炸中心的相對偏移
+                    double offsetX = (x - width / 2.0) * 0.2;
+                    double offsetY = (height / 2.0 - y) * 0.2;
+
+                    // 6. 建立粉塵粒子效果 (指定顏色與大小)
+                    // Vector3f 是顏色中心，1.0f 是粒子縮放倍率
+                    DustParticleEffect coloredDust = new DustParticleEffect(new Vector3f(r, g, b), 1.0f);
+
+                    // 7. 在世界中生成
+                    this.getWorld().addParticle(
+                            coloredDust,
+                            this.getX() + offsetX, this.getY() + offsetY, this.getZ(),
+                            0, 0, 0
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
